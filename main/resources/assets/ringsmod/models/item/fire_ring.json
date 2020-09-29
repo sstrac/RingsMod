@@ -1,4 +1,5 @@
 {
+  "parent": "builtin/generated",
   "textures": {
     "layer0": "ringsmod:item/fire_ring"
   }
