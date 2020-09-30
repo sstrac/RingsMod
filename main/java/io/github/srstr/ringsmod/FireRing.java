@@ -1,16 +1,15 @@
 package io.github.srstr.ringsmod;
 
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 
 public class FireRing extends Ring{
-    FireRing(){
-        super(Enchantments.FIRE_PROTECTION, Enchantments.FIRE_ASPECT);
+    FireRing(int level){
+        super(Enchantments.FIRE_PROTECTION, Enchantments.FIRE_ASPECT, level);
     }
 
-    public static FireRing create() {
-        return new FireRing();
+    public static FireRing create() { return create(1); }
+    public static FireRing create(int level) {
+        return new FireRing(level);
     }
 }
 

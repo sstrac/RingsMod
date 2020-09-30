@@ -10,7 +10,8 @@ public class Registration {
     public static DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RingsMod.MOD_ID);
 
     public static void registerAll(){
-        ITEMS.register("fire_ring", FireRing::create);
+        ITEMS.register("fire_ring_1", FireRing::create);
+        ITEMS.register("fire_ring_2", () -> FireRing.create(2));
     }
 
     public static void register(){

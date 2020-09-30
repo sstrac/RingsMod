@@ -21,7 +21,7 @@ public class EventHandler {
                 event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
                     if(!armor.getDisplayName().getString().contains("Ring")){
                         if (armor.getEnchantmentTagList().isEmpty()) {
-                            armor.addEnchantment(FireRing.armorEnchantment, 1);
+                            armor.addEnchantment(FireRing.armorEnchantment, FireRing.level);
                             armor.addEnchantment(Enchantments.BINDING_CURSE, 1);
                         }
                     }

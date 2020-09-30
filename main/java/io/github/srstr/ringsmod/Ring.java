@@ -6,16 +6,18 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Rarity;
 
 public abstract class Ring extends Item {
+    public static int level;
     public static Enchantment armorEnchantment;
     public static Enchantment weaponEnchantment;
 
-    public Ring(Enchantment armorEnchantment, Enchantment weaponEnchantment) {
+    public Ring(Enchantment armorEnchantment, Enchantment weaponEnchantment, int level) {
         super(new Item.Properties()
                 .group(ItemGroup.TOOLS)
                 .rarity(Rarity.EPIC)
                 .setNoRepair()
                 .maxStackSize(1));
-        this.armorEnchantment = armorEnchantment;
-        this.weaponEnchantment = weaponEnchantment;
+        Ring.armorEnchantment = armorEnchantment;
+        Ring.weaponEnchantment = weaponEnchantment;
+        Ring.level = level;
     }
 }

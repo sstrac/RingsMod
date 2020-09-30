@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ringsmod:fire_ring_1"
+    },
+    {
+      "item": "minecraft:diamond_block"
+    }
+  ],
+  "result": {
+    "item": "ringsmod:fire_ring_2",
+    "count": 1
+  }
+}

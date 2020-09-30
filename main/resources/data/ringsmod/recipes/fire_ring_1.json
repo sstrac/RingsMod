@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " x ",
+    " xc",
     "xox",
     " x "
   ],
@@ -11,10 +11,13 @@
     },
     "o": {
       "item": "minecraft:nether_star"
+    },
+    "c": {
+      "item": "minecraft:magma_cream"
     }
   },
   "result": {
-    "item": "ringsmod:fire_ring",
+    "item": "ringsmod:fire_ring_1",
     "count": 1
   }
 }
