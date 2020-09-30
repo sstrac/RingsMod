@@ -1,12 +1,9 @@
 package io.github.srstr.ringsmod;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,36 +16,34 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void handleEquipmentChange(LivingEquipmentChangeEvent event){
-        if(armorEquippedEvent(event)){
-            if(ringEquipped(event.getEntityLiving())){
-                if(event.getTo().getEnchantmentTagList().isEmpty()) {
-                    event.getTo().addEnchantment(FireRing.armorEnchantment, 1);
-                    event.getTo().addEnchantment(Enchantments.BINDING_CURSE, 1);
-                }
+        if(equipEvent(event)){
+            if(ringIsEquipped(event.getEntityLiving())){
+                event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
+                    if(!armor.getDisplayName().getString().contains("Ring")){
+                        if (armor.getEnchantmentTagList().isEmpty()) {
+                            armor.addEnchantment(FireRing.armorEnchantment, 1);
+                            armor.addEnchantment(Enchantments.BINDING_CURSE, 1);
+                        }
+                    }
+                });
             }
         }
-        else if (ringDeEquippedEvent(event)){
+        else if (deEquipEvent(event)){
             event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
                 armor.getEnchantmentTagList().clear();
             });
         }
-        else if (ringEquippedEvent(event)){
-            event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
-                event.getTo().addEnchantment(FireRing.armorEnchantment, 1);
-                event.getTo().addEnchantment(Enchantments.BINDING_CURSE, 1);
-            });
-        }
     }
 
-    public static boolean armorEquippedEvent(LivingEquipmentChangeEvent event){
+    public static boolean equipEvent(LivingEquipmentChangeEvent event){
         return equipmentMovedEvent(event, event.getTo());
     }
 
-    public static boolean ringDeEquippedEvent(LivingEquipmentChangeEvent event){
+    public static boolean deEquipEvent(LivingEquipmentChangeEvent event){
         return equipmentMovedEvent(event, event.getFrom());
     }
-    public static boolean ringEquippedEvent(LivingEquipmentChangeEvent event){
-        return equipmentMovedEvent(event, event.getTo());
+    public static boolean ringIsEquipped(LivingEntity entity){
+        return entity.getHeldItemOffhand().getDisplayName().getString().contains("Ring");
     }
 
     public static boolean equipmentMovedEvent(LivingEquipmentChangeEvent event, ItemStack item){
@@ -75,9 +70,5 @@ public class EventHandler {
             }
         }
         return result;
-    }
-
-    public static boolean ringEquipped(LivingEntity entity){
-        return entity.getHeldItemOffhand().getDisplayName().getString().contains("Ring");
     }
 }
