@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " xc",
+    "xox",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:gold_ingot"
+    },
+    "o": {
+      "item": "minecraft:nether_star"
+    },
+    "c": {
+      "item": "minecraft:block/sponge"
+    }
+  },
+  "result": {
+    "item": "ringsmod:ocean_ring_1",
+    "count": 1
+  }
+}

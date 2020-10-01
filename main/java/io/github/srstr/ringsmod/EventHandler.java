@@ -1,10 +1,14 @@
 package io.github.srstr.ringsmod;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -13,17 +17,19 @@ import org.apache.logging.log4j.Logger;
 @Mod.EventBusSubscriber
 public class EventHandler {
     private static final Logger LOGGER = LogManager.getLogger();
-
     @SubscribeEvent
     public static void handleEquipmentChange(LivingEquipmentChangeEvent event){
         if(equipEvent(event)){
             if(ringIsEquipped(event.getEntityLiving())){
                 event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
-                    if(!armor.getDisplayName().getString().contains("Ring")){
-                        if (armor.getEnchantmentTagList().isEmpty()) {
-                            armor.addEnchantment(FireRing.armorEnchantment, FireRing.level);
-                            armor.addEnchantment(Enchantments.BINDING_CURSE, 1);
-                        }
+                    //Additional constraints: not mainhand item, not enchanted already, not ring itself
+                    if(!armor.getDisplayName().getString().contains("Ring")
+                            && event.getSlot()!=EquipmentSlotType.MAINHAND
+                            && armor.getEnchantmentTagList().isEmpty()){
+                        //event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 9999));
+                        Ring ring = (Ring)(event.getEntityLiving().getHeldItemOffhand().getItem());
+                        armor.addEnchantment(ring.getEnchantmentForItem(armor), ring.getLevel());
+                        armor.addEnchantment(Enchantments.BINDING_CURSE, 1);
                     }
                 });
             }

@@ -11,6 +11,7 @@ public class Registration {
 
     public static void registerAll(){
         ITEMS.register("fire_ring_1", FireRing::create);
+        ITEMS.register("ocean_ring_1", OceanRing::create);
         ITEMS.register("fire_ring_2", () -> FireRing.create(2));
     }
 
