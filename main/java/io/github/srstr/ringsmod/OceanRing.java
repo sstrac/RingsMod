@@ -40,8 +40,12 @@ public class OceanRing extends Ring{
     }
 
     public ActionResultType onItemUse(ItemUseContext context){
-        absorb(context.getWorld(), context.getPos());
-        return ActionResultType.PASS;
+        if(Ring.itemUseIsValid(context.getHand())){
+            absorb(context.getWorld(), context.getPos());
+            return ActionResultType.PASS;
+        } else {
+            return ActionResultType.FAIL;
+        }
     }
 
     private boolean absorb(World worldIn, BlockPos pos) {

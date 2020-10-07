@@ -34,7 +34,11 @@ public class FireRing extends Ring{
     }
 
     public ActionResultType onItemUse(ItemUseContext context) {
-        return ignite(context);
+        if (Ring.itemUseIsValid(context.getHand())){
+            return ignite(context);
+        } else {
+            return ActionResultType.FAIL;
+        }
     }
 
     private ActionResultType ignite(ItemUseContext context){

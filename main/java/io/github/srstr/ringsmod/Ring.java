@@ -7,7 +7,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.Hand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,5 +63,9 @@ public abstract class Ring extends Item {
             LOGGER.error("No valid enchantment for item" + item.getDisplayName().getString());
             return null;
         }
+    }
+
+    public static boolean itemUseIsValid(Hand hand){
+        return hand == Hand.OFF_HAND;
     }
 }

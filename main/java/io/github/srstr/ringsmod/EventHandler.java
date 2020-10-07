@@ -1,14 +1,12 @@
 package io.github.srstr.ringsmod;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +18,8 @@ public class EventHandler {
     @SubscribeEvent
     public static void handleEquipmentChange(LivingEquipmentChangeEvent event){
         if (deEquipEvent(event)){
-            if(event.getFrom().getDisplayName().getString().contains("Ring")){
+            if(event.getFrom().getItem() instanceof Ring){
+
                 Ring ring = (Ring)(event.getFrom().getItem());
                 event.getEntityLiving().removePotionEffect(ring.getEffect());
                 event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
@@ -30,13 +29,13 @@ public class EventHandler {
         }
         if(equipEvent(event)){
             if(ringIsEquipped(event.getEntityLiving())){
+                Ring ring = (Ring)(event.getEntityLiving().getHeldItemOffhand().getItem());
+                event.getEntityLiving().addPotionEffect(new EffectInstance(ring.getEffect(), 9999));
                 event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
                     //Additional constraints: not mainhand item, not enchanted already, not ring itself
                     if(isArmor(armor)
                             && event.getSlot()!=EquipmentSlotType.MAINHAND
                             && armor.getEnchantmentTagList().isEmpty()){
-                        Ring ring = (Ring)(event.getEntityLiving().getHeldItemOffhand().getItem());
-                        event.getEntityLiving().addPotionEffect(new EffectInstance(ring.getEffect(), 9999));
                         armor.addEnchantment(ring.getEnchantmentForItem(armor), ring.getLevel());
                         armor.addEnchantment(Enchantments.BINDING_CURSE, 1);
                     }
@@ -57,29 +56,24 @@ public class EventHandler {
     }
 
     public static boolean equipmentMovedEvent(LivingEquipmentChangeEvent event, ItemStack item){
-        boolean result = false;
-        if(event.getSlot() == EquipmentSlotType.CHEST){
-            if(item.getDisplayName().getString().contains("Chestplate")){
-                result =  true;
+        if(item.getItem() instanceof ArmorItem){
+            if(event.getSlot() == EquipmentSlotType.CHEST
+            || event.getSlot() == EquipmentSlotType.HEAD
+            || event.getSlot() == EquipmentSlotType.LEGS
+            || event.getSlot() == EquipmentSlotType.FEET){
+                return true;
+            } else {
+                return false;
             }
-        } else if(event.getSlot() == EquipmentSlotType.HEAD){
-            if(item.getDisplayName().getString().contains("Helmet")){
-                result =  true;
+        }  else if(event.getSlot() == EquipmentSlotType.OFFHAND){
+            if(item.getItem() instanceof Ring){
+                return true;
+            } else {
+                return false;
             }
-        } else if(event.getSlot() == EquipmentSlotType.LEGS){
-            if(item.getDisplayName().getString().contains("Leggings")){
-                result =  true;
-            }
-        } else if(event.getSlot() == EquipmentSlotType.FEET){
-            if(item.getDisplayName().getString().contains("Boots")){
-                result =  true;
-            }
-        } else if(event.getSlot() == EquipmentSlotType.OFFHAND){
-            if(item.getDisplayName().getString().contains("Ring")){
-                result = true;
-            }
+        } else {
+            return false;
         }
-        return result;
     }
 
     public static boolean isArmor(ItemStack item){
