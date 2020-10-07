@@ -13,7 +13,7 @@
       "item": "minecraft:nether_star"
     },
     "c": {
-      "item": "minecraft:block/sponge"
+      "item": "minecraft:sponge"
     }
   },
   "result": {

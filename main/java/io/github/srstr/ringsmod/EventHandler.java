@@ -12,6 +12,8 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Objects;
+
 @Mod.EventBusSubscriber
 public class EventHandler {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -42,6 +44,11 @@ public class EventHandler {
                 });
             }
         }
+        //for getting minecraft object tags for recipes
+//        else{
+//            if(!Objects.isNull(event.getTo().getTag()))
+//                LOGGER.info(event.getTo().getTag().getString());
+//        }
     }
 
     public static boolean equipEvent(LivingEquipmentChangeEvent event){
@@ -52,7 +59,7 @@ public class EventHandler {
         return equipmentMovedEvent(event, event.getFrom());
     }
     public static boolean ringIsEquipped(LivingEntity entity){
-        return entity.getHeldItemOffhand().getDisplayName().getString().contains("Ring");
+        return entity.getHeldItemOffhand().getItem() instanceof Ring;
     }
 
     public static boolean equipmentMovedEvent(LivingEquipmentChangeEvent event, ItemStack item){
