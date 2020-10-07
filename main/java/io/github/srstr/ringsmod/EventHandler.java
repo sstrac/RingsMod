@@ -19,25 +19,29 @@ public class EventHandler {
     private static final Logger LOGGER = LogManager.getLogger();
     @SubscribeEvent
     public static void handleEquipmentChange(LivingEquipmentChangeEvent event){
+        if (deEquipEvent(event)){
+            if(event.getFrom().getDisplayName().getString().contains("Ring")){
+                Ring ring = (Ring)(event.getFrom().getItem());
+                event.getEntityLiving().removePotionEffect(ring.getEffect());
+                event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
+                    armor.getEnchantmentTagList().clear();
+                });
+            }
+        }
         if(equipEvent(event)){
             if(ringIsEquipped(event.getEntityLiving())){
                 event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
                     //Additional constraints: not mainhand item, not enchanted already, not ring itself
-                    if(!armor.getDisplayName().getString().contains("Ring")
+                    if(isArmor(armor)
                             && event.getSlot()!=EquipmentSlotType.MAINHAND
                             && armor.getEnchantmentTagList().isEmpty()){
-                        //event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 9999));
                         Ring ring = (Ring)(event.getEntityLiving().getHeldItemOffhand().getItem());
+                        event.getEntityLiving().addPotionEffect(new EffectInstance(ring.getEffect(), 9999));
                         armor.addEnchantment(ring.getEnchantmentForItem(armor), ring.getLevel());
                         armor.addEnchantment(Enchantments.BINDING_CURSE, 1);
                     }
                 });
             }
-        }
-        else if (deEquipEvent(event)){
-            event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
-                armor.getEnchantmentTagList().clear();
-            });
         }
     }
 
@@ -76,5 +80,15 @@ public class EventHandler {
             }
         }
         return result;
+    }
+
+    public static boolean isArmor(ItemStack item){
+        if(item.getDisplayName().getString().contains("Helmet")
+        || item.getDisplayName().getString().contains("Chestplate")
+        || item.getDisplayName().getString().contains("Leggings")
+        || item.getDisplayName().getString().contains("Boots"))
+            return true;
+        else
+            return false;
     }
 }

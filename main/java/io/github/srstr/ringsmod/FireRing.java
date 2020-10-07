@@ -1,14 +1,13 @@
 package io.github.srstr.ringsmod;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CampfireBlock;
+import net.minecraft.block.*;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundCategory;
@@ -20,7 +19,13 @@ import java.util.ArrayList;
 
 public class FireRing extends Ring{
     private FireRing(int level){
-        super(Enchantments.FIRE_PROTECTION, Enchantments.FIRE_PROTECTION, Enchantments.FIRE_PROTECTION, Enchantments.FIRE_PROTECTION, Enchantments.FIRE_ASPECT, level);
+        super(Enchantments.FIRE_PROTECTION,
+                Enchantments.FIRE_PROTECTION,
+                Enchantments.FIRE_PROTECTION,
+                Enchantments.FIRE_PROTECTION,
+                Enchantments.FIRE_ASPECT,
+                level,
+                Effects.FIRE_RESISTANCE);
     }
 
     public static FireRing create() { return create(1); }
@@ -29,6 +34,10 @@ public class FireRing extends Ring{
     }
 
     public ActionResultType onItemUse(ItemUseContext context) {
+        return ignite(context);
+    }
+
+    private ActionResultType ignite(ItemUseContext context){
         PlayerEntity playerentity = context.getPlayer();
         World world = context.getWorld();
         BlockPos blockpos = context.getPos();
@@ -44,16 +53,10 @@ public class FireRing extends Ring{
 
             return ActionResultType.func_233537_a_(world.isRemote());
         } else {
-            BlockPos blockpos1 = blockpos.offset(context.getFace());
-            ArrayList<BlockPos> surroundingBlocks = new ArrayList<>();
-            surroundingBlocks.add(blockpos.east().up());
-            surroundingBlocks.add(blockpos.north().up());
-            surroundingBlocks.add(blockpos.west().up());
-            surroundingBlocks.add(blockpos.south().up());
+            final BlockPos blockpos1 = blockpos.offset(context.getFace());
+            ArrayList<BlockPos> surroundingBlocks = findValidBlocks(blockstate, world, blockpos1);
             if (AbstractFireBlock.func_241465_a_(world, blockpos1, context.getPlacementHorizontalFacing())) {
                 world.playSound(playerentity, blockpos1, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-                BlockState blockstate1 = AbstractFireBlock.func_235326_a_(world, blockpos1);
-                world.setBlockState(blockpos1, blockstate1, 11);
                 surroundingBlocks.forEach(blockPos -> {
                     BlockState blockState = AbstractFireBlock.func_235326_a_(world, blockPos);
                     world.setBlockState(blockPos, blockState, 11);
@@ -72,5 +75,78 @@ public class FireRing extends Ring{
             }
         }
     }
-}
 
+    /**
+     * Checks if a block can be ignited based on whether the block is air and the
+     * block below is solid
+     * @return
+     */
+    private boolean validIgnition(World world, BlockPos blockPos){
+        //check if block same y is air and block below is not air
+        BlockState blockState = world.getBlockState(blockPos);
+        BlockState belowBlockState = world.getBlockState(blockPos.down());
+        return blockState.isAir(world, blockPos) && belowBlockState.isSolid();
+    }
+
+    /**
+     * Get list of block which can be ignited in surrounding area from item used block
+     * @param blockState
+     * @param world
+     * @param blockPos
+     * @return
+     */
+    private ArrayList<BlockPos> findValidBlocks(BlockState blockState, World world, BlockPos blockPos){
+        ArrayList<BlockPos> surroundingBlocks = new ArrayList<>();
+        if(validIgnition(world, blockPos))
+            surroundingBlocks.add(blockPos);
+        if(validIgnition(world, blockPos.east()))
+            surroundingBlocks.add(blockPos.east());
+        if (validIgnition(world, blockPos.west()))
+            surroundingBlocks.add(blockPos.west());
+        if (validIgnition(world, blockPos.north()))
+            surroundingBlocks.add(blockPos.north());
+        if (validIgnition(world, blockPos.south()))
+            surroundingBlocks.add(blockPos.south());
+        if (validIgnition(world, blockPos.east().up()))
+            surroundingBlocks.add(blockPos.east().up());
+        if (validIgnition(world, blockPos.west().up()))
+            surroundingBlocks.add(blockPos.west().up());
+        if (validIgnition(world, blockPos.north().up()))
+            surroundingBlocks.add(blockPos.north().up());
+        if (validIgnition(world, blockPos.south().up()))
+            surroundingBlocks.add(blockPos.south().up());
+        if (validIgnition(world, blockPos.east().down()))
+            surroundingBlocks.add(blockPos.east().down());
+        if (validIgnition(world, blockPos.west().down()))
+            surroundingBlocks.add(blockPos.west().down());
+        if (validIgnition(world, blockPos.north().down()))
+            surroundingBlocks.add(blockPos.north().down());
+        if (validIgnition(world, blockPos.south().down()))
+            surroundingBlocks.add(blockPos.south().down());
+        if (validIgnition(world, blockPos.add(1,0,1)))
+            surroundingBlocks.add(blockPos.add(1,0,1));
+        if (validIgnition(world, blockPos.add(-1,0,1)))
+            surroundingBlocks.add(blockPos.add(-1,0,1));
+        if (validIgnition(world, blockPos.add(1,0,-1)))
+            surroundingBlocks.add(blockPos.add(1,0,-1));
+        if (validIgnition(world, blockPos.add(-1,0,-1)))
+            surroundingBlocks.add(blockPos.add(-1,0,-1));
+        if (validIgnition(world, blockPos.add(1,1,1)))
+            surroundingBlocks.add(blockPos.add(1,1,1));
+        if (validIgnition(world, blockPos.add(-1,1,1)))
+            surroundingBlocks.add(blockPos.add(-1,1,1));
+        if (validIgnition(world, blockPos.add(1,1,-1)))
+            surroundingBlocks.add(blockPos.add(1,1,-1));
+        if (validIgnition(world, blockPos.add(-1,1,-1)))
+            surroundingBlocks.add(blockPos.add(-1,1,-1));
+        if (validIgnition(world, blockPos.add(1,-1,1)))
+            surroundingBlocks.add(blockPos.add(1,-1,1));
+        if (validIgnition(world, blockPos.add(-1,-1,1)))
+            surroundingBlocks.add(blockPos.add(-1,-1,1));
+        if (validIgnition(world, blockPos.add(1,-1,-1)))
+            surroundingBlocks.add(blockPos.add(1,-1,-1));
+        if (validIgnition(world, blockPos.add(-1,-1,-1)))
+            surroundingBlocks.add(blockPos.add(-1,-1,-1));
+        return surroundingBlocks;
+    }
+}
