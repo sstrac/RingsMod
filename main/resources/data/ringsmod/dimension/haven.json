@@ -1,0 +1,13 @@
+{
+  "type": "ringsmod:haven",
+  "generator": {
+    "type": "minecraft:noise",
+    "seed": 123,
+    "settings": "minecraft:overworld",
+    "biome_source": {
+      "biomes": ,
+      "type": "minecraft:va",
+      "seed": 123
+    }
+  }
+}

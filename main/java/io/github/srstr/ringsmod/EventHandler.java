@@ -12,8 +12,6 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Objects;
-
 @Mod.EventBusSubscriber
 public class EventHandler {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -21,7 +19,6 @@ public class EventHandler {
     public static void handleEquipmentChange(LivingEquipmentChangeEvent event){
         if (deEquipEvent(event)){
             if(event.getFrom().getItem() instanceof Ring){
-
                 Ring ring = (Ring)(event.getFrom().getItem());
                 event.getEntityLiving().removePotionEffect(ring.getEffect());
                 event.getEntityLiving().getEquipmentAndArmor().forEach(armor -> {
