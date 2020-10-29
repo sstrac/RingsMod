@@ -1,0 +1,55 @@
+{
+  "precipitation": "none",
+  "category": "none",
+  "depth": 0.1,
+  "scale": 0.2,
+  "temperature": 0.8,
+  "temperature_modifier": "none",
+  "downfall": 0,
+  "effects": {
+    "fog_color": 1643784,
+    "foliage_color": 7304538,
+    "grass_color": 7304538,
+    "sky_color": 1643784,
+    "water_color": 342306,
+    "water_fog_color": 332810,
+    "grass_color_modifier": "none",
+    "particle": {
+      "options": {
+        "type": "crimson_spore"
+      },
+      "probability": 0.025
+    },
+    "music": {
+      "sound": "ringsmod:music.haven_music",
+      "min_delay": 12000,
+      "max_delay": 24000,
+      "replace_current_music": true
+    }
+  },
+  "surface_builder": {
+    "type": "default",
+    "config": {
+      "top_material": {
+        "Name": "ringsmod:grand_gravel",
+        "Properties": {
+          "snowy": "false"
+        }
+      },
+      "under_material": {
+        "Name": "undergarden:coal_block"
+      },
+      "underwater_material": {
+        "Name": "undergarden:coal_block"
+      }
+    }
+  },
+  "spawn_costs": {},
+  "spawners": {},
+  "starts": [],
+  "features": [],
+  "carvers": {
+    "air": [
+    ]
+  }
+}

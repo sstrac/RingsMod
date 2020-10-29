@@ -1,4 +1,4 @@
-package io.github.srstr.ringsmod;
+package io.github.srstr.ringsmod.item;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.EquipmentSlotType;

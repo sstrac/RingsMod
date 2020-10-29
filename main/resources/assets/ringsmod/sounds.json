@@ -1,0 +1,8 @@
+{
+  "music.haven_music": {
+    "category": "music",
+    "sounds" : [
+      { "name":  "ringsmod:music/november_flight", "stream":  true }
+    ]
+  }
+}

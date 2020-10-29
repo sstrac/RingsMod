@@ -5,8 +5,8 @@
     "seed": 123,
     "settings": "minecraft:overworld",
     "biome_source": {
-      "biomes": ,
-      "type": "minecraft:va",
+      "biomes": ["ringsmod:haven"],
+      "type": "minecraft:checkerboard",
       "seed": 123
     }
   }

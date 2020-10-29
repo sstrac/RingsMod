@@ -1,5 +1,6 @@
 package io.github.srstr.ringsmod;
 
+import io.github.srstr.ringsmod.item.Ring;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -11,6 +12,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Objects;
 
 @Mod.EventBusSubscriber
 public class EventHandler {
@@ -41,11 +44,10 @@ public class EventHandler {
                 });
             }
         }
-        //for getting minecraft object tags for recipes
-//        else{
-//            if(!Objects.isNull(event.getTo().getTag()))
-//                LOGGER.info(event.getTo().getTag().getString());
-//        }
+        else{
+            if(!Objects.isNull(event.getTo().getTag()))
+                LOGGER.info(event.getTo().getTag().getString());
+        }
     }
 
     public static boolean equipEvent(LivingEquipmentChangeEvent event){

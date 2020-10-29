@@ -1,4 +1,4 @@
-package io.github.srstr.ringsmod;
+package io.github.srstr.ringsmod.item;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
-public class FireRing extends Ring{
+public class FireRing extends Ring {
     private FireRing(int level){
         super(Enchantments.FIRE_PROTECTION,
                 Enchantments.FIRE_PROTECTION,
